@@ -1,0 +1,76 @@
+extra Security
+
+define('DISALLOW_FILE_EDIT', true);
+define('DISALLOW_FILE_MODS', true);
+define('FORCE_SSL_ADMIN', true);
+define('WP_POST_REVISIONS', 5);
+
+AND HTACSSEES
+
+# Disable directory browsing
+Options -Indexes
+
+# Protect wp-config
+<Files wp-config.php>
+    Require all denied
+</Files>
+
+# Block xmlrpc
+<Files xmlrpc.php>
+    Require all denied
+</Files>
+
+# Protect .htaccess
+<Files .htaccess>
+    Require all denied
+</Files>
+
+# Block sensitive files
+<FilesMatch "^(wp-config\.php|\.htaccess|\.user\.ini|readme\.html|license\.txt)">
+    Require all denied
+</FilesMatch>
+
+# Block author scans
+RewriteEngine On
+RewriteCond %{QUERY_STRING} author=\d
+RewriteRule ^ /? [L,R=301]
+
+# Block direct PHP access in wp-includes
+RewriteRule ^wp-includes/.*\.php$ - [F,L]
+
+
+ALSO DO THAT 
+
+
+
+
+
+🔒 IMPORTANT (Uploads protection - correct way)
+
+Instead of <Directory>, do this:
+
+📁 Create file:
+/wp-content/uploads/.htaccess
+Add inside it:
+<FilesMatch "\.php$">
+    Require all denied
+</FilesMatch>
+
+✔ This is the correct method
+✔ No server error
+✔ Blocks malware execution
+
+
+
+
+
+
+AND FILE PERMISSION,
+
+
+
+✅ File permissions (VERY important)
+wp-config.php → 600
+.htaccess → 644
+folders → 755
+files → 644
